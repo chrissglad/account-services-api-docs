@@ -20,39 +20,6 @@ tags:
 paths:
   /accounts/{accountId}/balance:
     get:
-      x-codeSamples:
-        - lang: cURL
-          label: cURL
-          source: |
-            curl -X GET \
-            "https://dev.bank.co.tz/api/v1/accounts/123456789/balance" \
-            -H "Authorization: Bearer YOUR_TOKEN"
-
-        - lang: Python
-          label: Python
-          source: |
-            import requests
-
-            headers = {
-                "Authorization": "Bearer YOUR_TOKEN"
-            }
-
-            response = requests.get(
-                "https://dev.bank.co.tz/api/v1/accounts/123456789/balance",
-                headers=headers
-            )
-
-            print(response.json())
-
-        - lang: Java
-          label: Java
-          source: |
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://dev.bank.co.tz/api/v1/accounts/123456789/balance"))
-                .header("Authorization", "Bearer YOUR_TOKEN")
-                .GET()
-                .build();
-
       operationId: getAccontBalance
       summary: Get account balance
       description: Returns the available and current balance for a given account.
