@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Account Services API
+  description: >
+    This is an example SWAGGER Document to retrieves account balance and statement information from the core banking system.
+  version: 1.0.0
+
+servers:
+  - url: https://dev.bank.co.tz/api/v1
+    description: (DEV) environment
+  - url: https://uat.bank.co.tz/api/v1
+    description: (UAT) environment
+  - url: https://prod.bank.co.tz/api/v1
+    description: (PROD) environment
+
+paths:
+  /accounts/{accountId}/balance:
+    get:
+
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -X GET \
+            "https://dev.bank.co.tz/api/v1/accounts/123456789/balance" \
+            -H "Authorization: Bearer YOUR_TOKEN"
+
+        - lang: Python
+          label: Python
+          source: |
+            import requests
+
+            headers = {
+                "Authorization": "Bearer YOUR_TOKEN"
+            }
+
+            response = requests.get(
+                "https://dev.bank.co.tz/api/v1/accounts/123456789/balance",
+                headers=headers
+            )
+
+            print(response.json())
+
+        - lang: Java
+          label: Java
+          source: |
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://dev.bank.co.tz/api/v1/accounts/123456789/balance"))
+                .header("Authorization", "Bearer YOUR_TOKEN")
+                .GET()
+                .build();
+
+
+      summary: Get account balance
+      description: Returns the available and current balance for a given account.
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The customer's account number
+          schema:
+            type: string
+          example: "123456789"
+      responses:
+        '200':
+          description: Balance retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accountId:
+                    type: string
+                    example: "123456789"
+                  availableBalance:
+                    type: number
+                    format: double
+                    example: 1250000.50
+                  currentBalance:
+                    type: number
+                    format: double
+                    example: 1300000.50
+                  currency:
+                    type: string
+                    example: "TZS"
+                  asOf:
+                    type: string
+                    format: date-time
+                    example: "2026-07-09T10:30:00Z"
+        '401':
+          description: Missing or invalid authentication token
+        '404':
+          description: Account not found
+        '500':
+          description: Internal server error (e.g., core banking system unavailable)
+  /accounts/{accountId}/mini_statement:
+    get:
+      summary: Get the latest X transactions
+      description: Returns the latest X account transactions for a given account, defaulted to (5)
+      tags:
+        - Accounts
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The customer's account number
+          schema:
+            type: string
+          example: "123456789"
+        - name: count
+          in: query
+          required: false
+          description: number of transactions to be retrieved
+          schema:
+            type: number
+          example: 5
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    accountId:
+                      type: string
+                      example: "123456789"
+                    transactionId:
+                      type: string
+                      example: "1234"
+                    date:
+                      type: string
+                      format: date
+                      example: "2026-07-08"
+                    description:
+                      type: string
+                      example: "Transfer"
+                    type:
+                      type: string
+                      example: "Debit"
+                    currency:
+                      type: string
+                      example: "TZS"
+                    amount:
+                      type: number
+                      format: double
+                      example: 120000.00
+                    balanceAfter:
+                      type: number
+                      format: double
+                      example: 50000.00
+        '401':
+          description: Missing or invalid authentication token
+        '404':
+          description: Account not found
+        '500':
+          description: Internal server error (e.g., core banking system unavailable)
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
