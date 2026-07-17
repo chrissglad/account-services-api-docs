@@ -13,10 +13,13 @@ servers:
   - url: https://prod.bank.co.tz/api/v1
     description: (PROD) environment
 
+tags:
+  - name: Accounts
+    description: Customer account
+
 paths:
   /accounts/{accountId}/balance:
     get:
-
       x-codeSamples:
         - lang: cURL
           label: cURL
@@ -50,7 +53,7 @@ paths:
                 .GET()
                 .build();
 
-
+      operationId: getAccontBalance
       summary: Get account balance
       description: Returns the available and current balance for a given account.
       tags:
@@ -97,7 +100,8 @@ paths:
           description: Internal server error (e.g., core banking system unavailable)
   /accounts/{accountId}/mini_statement:
     get:
-      summary: Get the latest X transactions
+      operationId: getMiniStatement
+      summary: Get the latest transactions
       description: Returns the latest X account transactions for a given account, defaulted to (5)
       tags:
         - Accounts
@@ -114,7 +118,7 @@ paths:
           required: false
           description: number of transactions to be retrieved
           schema:
-            type: number
+            type: integer
           example: 5
       responses:
         '200':
