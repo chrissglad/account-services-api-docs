@@ -15,11 +15,21 @@
 
 <script>
 
+// Scalar.createApiReference('#app', {
+//     url: './account-services.yaml'
+// });
+
 Scalar.createApiReference('#app', {
-    url: './account-services.yaml'
-});
+  spec: { url: './account-services.yaml' },
+  customCss: '.references-footer { display: none !important; }'
+})
 
 </script>
 
 </body>
 </html>
+
+Scalar.createApiReference('#app', {
+  spec: { url: './account-services.yaml' },
+  customCss: '.references-footer { display: none !important; }'
+})
